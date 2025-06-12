@@ -2,24 +2,19 @@ import tkinter as tk
 import tkinter.ttk as ttk 
 janela = tk.Tk() 
 janela.title("calculadora")
-janela.geometry("350x400")
+janela.geometry("330x450")
+boleano = False
 def delete_entry(num1, num2) :
     num1.delete(0, 'end')
     num2.delete(0, 'end')
 def valida_numero(digito) : 
-    x = len(numero1.get())
-    y = len(numero2.get())
-    try :
-        if y >= 10 :
-           return False
-        if x >= 10 :
-           return False
-    except x >= 10 :
-        if y >= 10 :
-            return False
+    global boleano
     if resultado['text'] != '' :
         delete_entry(numero1, numero2)
-    if digito.isdigit():
+    if boleano == True :
+        delete_entry(numero1, numero2)
+        boleano = False
+    if digito.isdigit() :
         return True
     else:
         return False
@@ -38,8 +33,8 @@ def add_result() :
     global xxx
     valor1 = numero1.get()
     valor2 = numero2.get()
-    valor1 = int(valor1)
-    valor2 = int(valor2)
+    valor1 = float(valor1)
+    valor2 = float(valor2)
     if xxx == 'X' :
         result = valor1*valor2
     if xxx == '-' :
@@ -53,10 +48,18 @@ def add_result() :
     sinal_do_calculo['text'] = '[ ]'
     xxx = sinal_do_calculo['text']
 def clear() :
+    global boleano
     global xxx
     resultado['text'] = ''
     sinal_do_calculo['text'] = '[ ]'
     xxx = sinal_do_calculo['text']
+    boleano = True
+    if boleano == True :
+        delete_entry(numero1, numero2)
+        boleano = False
+def float_number() :
+        point = '.'
+        numero1.insert('end', point)
 def botao_resultado() :
     result = resultado['text']
     try :
@@ -75,16 +78,16 @@ frame3.pack()
 
 
 #entradas/resultado
-numero1 = tk.Entry(frame1, text='', width=10, font='10', border=5)
+numero1 = tk.Entry(frame1, text='', width=20, font='10', border=5, justify='center')
 numero1.config(validate="key", validatecommand=(janela.register(valida_numero), "%P"))
 sinal_do_calculo = tk.Label(frame1, text='[ ]')
-numero2 = tk.Entry(frame1,text='', width=10, font='10', border=5)
+numero2 = tk.Entry(frame1,text='', width=20, font='10', border=5, justify='center')
 numero2.config(validate="key", validatecommand=(janela.register(valida_numero), "%P"))
 resultado = tk.Label(frame2, text='', bg='white', width=20, font='20')
-numero1.pack(side='left')
-sinal_do_calculo.pack(side='left')
-numero2.pack(side='left')
-resultado.pack(side='left')
+numero1.pack()
+sinal_do_calculo.pack()
+numero2.pack()
+resultado.pack()
 #botões 
 b9 = tk.Button(frame3,text='9',  width= 5, height= 5)
 b8 = tk.Button(frame3,text='8',  width= 5, height= 5)
@@ -103,6 +106,7 @@ b0 = tk.Button(frame3,text='0',  width= 5, height= 5)
 divisao = tk.Button(frame3, text='÷', width= 5, height= 5)
 dell = tk.Button(frame3, text='DEL',command=clear, bg='red', fg='white', width= 5, height= 5)
 dar_resultado = tk.Button(frame3,text='=',command=add_result, width= 5, height= 5)
+ponto = tk.Button(frame3, text='.', command=float_number, width= 5, height= 5)
 #grids e binds 
 b9.grid(row=3 , column=2)
 b9.bind("<Button-1>", add_number) 
@@ -112,7 +116,7 @@ b7.grid(row=3 , column=0)
 b7.bind("<Button-1>", add_number) 
 mais.grid(row=3 , column=3)
 mais.bind("<Button-1>", add_sinal)
-b_result.grid(row=3, column=4)
+b_result.grid(row=4, column=4)
 b6.grid(row=4, column=2)
 b6.bind("<Button-1>", add_number) 
 b5.grid(row=4, column=1)
@@ -131,7 +135,8 @@ vezes.grid(row=5, column=3)
 vezes.bind("<Button-1>", add_sinal)
 b0.grid(row=6, column=1)
 b0.bind("<Button-1>", add_number) 
-dell.grid(row=6, column=0)
+dell.grid(row=3, column=4)
+ponto.grid(row=6, column=0)
 dar_resultado.grid(row=6, column=2)
 divisao.grid(row=6, column=3)
 divisao.bind("<Button-1>", add_sinal)
